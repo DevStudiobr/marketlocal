@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Local</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Produtos Locais</h1>
+  
+  <!-- Formulário para cadastrar produtos -->
+  <div class="form-container">
+    <h2>Cadastrar Produto</h2>
+    <form id="product-form">
+      <input type="text" id="seller-name" placeholder="Nome do vendedor" required>
+      <input type="tel" id="seller-whatsapp" placeholder="Número do WhatsApp" required>
+      <input type="text" id="product-name" placeholder="Nome do produto" required>
+      <input type="text" id="product-description" placeholder="Descrição do produto" required>
+      <input type="file" id="product-image" accept="image/*" required>
+      <button type="submit">Cadastrar Produto</button>
+    </form>
+  </div>
+
+  <!-- Lista de produtos -->
+  <div id="products-container">
+    <h2>Produtos Cadastrados</h2>
+    <div id="products-list"></div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
