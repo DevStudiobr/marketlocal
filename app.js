@@ -28,43 +28,52 @@ productForm.addEventListener('submit', async (e) => {
   const productDescription = document.getElementById('product-description').value;
   const productImage = document.getElementById('product-image').files[0];
 
-  // Salvar a imagem no Firebase Storage
-  const storageRef = storage.ref('products/' + productImage.name);
-  await storageRef.put(productImage);
-  const imageUrl = await storageRef.getDownloadURL();
+  try {
+    // Salvar a imagem no Firebase Storage
+    const storageRef = storage.ref('products/' + productImage.name);
+    await storageRef.put(productImage);
+    const imageUrl = await storageRef.getDownloadURL();
 
-  // Salvar os dados no Firestore
-  await db.collection('products').add({
-    sellerName,
-    sellerWhatsApp,
-    productName,
-    productDescription,
-    imageUrl
-  });
+    // Salvar os dados no Firestore
+    await db.collection('products').add({
+      sellerName,
+      sellerWhatsApp,
+      productName,
+      productDescription,
+      imageUrl
+    });
 
-  alert('Produto cadastrado com sucesso!');
-  productForm.reset();
-  loadProducts(); // Recarregar a lista de produtos
+    alert('Produto cadastrado com sucesso!');
+    productForm.reset();
+    loadProducts(); // Recarregar a lista de produtos
+  } catch (error) {
+    console.error('Erro ao cadastrar o produto:', error);
+  }
 });
 
 // Carregar produtos do Firestore
 async function loadProducts() {
-  productsList.innerHTML = '';
-  const querySnapshot = await db.collection('products').get();
+  productsList.innerHTML = ''; // Limpa a lista antes de carregar
 
-  querySnapshot.forEach((doc) => {
-    const product = doc.data();
-    productsList.innerHTML += `
-      <div class="product">
-        <img src="${product.imageUrl}" alt="${product.productName}">
-        <h3>${product.productName}</h3>
-        <p>${product.productDescription}</p>
-        <a class="buy-btn" href="https://wa.me/${product.sellerWhatsApp}?text=Olá,%20gostaria%20de%20comprar%20o%20produto%20${product.productName}!" target="_blank">
-          Fazer a compra
-        </a>
-      </div>
-    `;
-  });
+  try {
+    const querySnapshot = await db.collection('products').get();
+
+    querySnapshot.forEach((doc) => {
+      const product = doc.data();
+      productsList.innerHTML += `
+        <div class="product">
+          <img src="${product.imageUrl}" alt="${product.productName}">
+          <h3>${product.productName}</h3>
+          <p>${product.productDescription}</p>
+          <a class="buy-btn" href="https://wa.me/${product.sellerWhatsApp}?text=Olá,%20gostaria%20de%20comprar%20o%20produto%20${product.productName}!" target="_blank">
+            Fazer a compra
+          </a>
+        </div>
+      `;
+    });
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error);
+  }
 }
 
 // Carregar produtos ao iniciar
